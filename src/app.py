@@ -57,11 +57,11 @@ class FundusImage(db.Model):
 @app.route('/')
 def index():
     #return render_template("upload_image.html")
-    return render_template("index.html")
+    return render_template("index.html", title="Home")
 
 @app.route('/registration')
 def navigate_registration():
-    return render_template("registration.html")
+    return render_template("registration.html", title="Register")
 
 @app.route('/registration', methods=["POST", "GET"])
 def register():
