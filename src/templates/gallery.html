@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container">
+
+        <div class="col-lg-12">
+            <h1 class="page-header">Thumbnail gallery</h1>
+        </div>
+    <hr/>
+        {{ image_names }}
+        <hr/>
+    <div class="row">
+        {% for image_name in image_names %}
+        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+            <img class="img-thumbnail" src="{{ url_for('send_original_image', filename=image_name, path=original_path) }}">
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

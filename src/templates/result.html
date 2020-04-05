@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h1>Result of the diagnosis:</h1>
+    </div>
+    <div class="row">
+        {% if stage == 0 %}
+            <h1>Stage 0 <br/>
+             No Diabetic Retinopathy</h1>
+        {% elif stage == 1 %}
+            <h1>Stage 1 <br/>
+             Mild Non-proliferative Diabetic Retinopathy</h1>
+        {% elif stage == 2 %}
+            <h1>Stage 2 <br/>
+             Moderate Non-proliferative Diabetic Retinopathy</h1>
+        {% elif stage == 3 %}
+            <h1>Stage 3 <br/>
+             Sever Non-proliferative Diabetic Retinopathy</h1>
+        {% else %}
+            <h1>Stage 4 <br/>
+             Proliferative Diabetic Retinopathy</h1>
+        {% endif %}
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Original image</h4>
+            <img class="img-thumbnail" src="{{ url_for('send_original_image', path=original_path, filename=image_name) }}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Preprocessed Image</h4>
+            <img class="img-thumbnail" src="{{ url_for('send_original_image',path=preprocessed_path, filename=image_name) }}">
+        </div>
+    </div>
+
+    {% if stage>0 %}
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Microaneurysms</h4>
+                <img class="img-thumbnail" src="{{ url_for('send_original_image',path=microaneurysms_path, filename=image_name) }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Exudates</h4>
+                <img class="img-thumbnail" src="{{ url_for('send_original_image',path=exudates_path, filename=image_name) }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Blood Vessels</h4>
+                <img class="img-thumbnail" src="{{ url_for('send_original_image',path=blood_vessels_path, filename=image_name) }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h4>haemorrhages</h4>
+                <img class="img-thumbnail" src="{{ url_for('send_original_image',path=haemorrhage_path, filename=image_name) }}">
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
