@@ -3,18 +3,20 @@
 <script src="https://cdn.jotfor.ms/static/jotform.forms.js?3.3.16334" type="text/javascript"></script>
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.css" rel="stylesheet" id="bootstrap-css-date">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.css"
+      rel="stylesheet" id="bootstrap-css-date">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <script type="text/javascript">
     JotForm.init(function(){
-    if (window.JotForm && JotForm.accessible) $('input_73').setAttribute('tabindex',0);
-    if (window.JotForm && JotForm.accessible) $('patient_register2').setAttribute('tabindex',0);
-    JotForm.description('patient_register2', 'Please list all medications (DRUG NAME, DOSE, FREQUENCY, ROUTE) that you are currently prescribed, if more than one, separate them with a comma.');
-    JotForm.newDefaultTheme = false;
-    /*INIT-END*/
+        if (window.JotForm && JotForm.accessible) $('input_73').setAttribute('tabindex',0);
+        if (window.JotForm && JotForm.accessible) $('patient_register2').setAttribute('tabindex',0);
+        JotForm.description('patient_register2', 'Please list all medications (DRUG NAME, DOSE, FREQUENCY, ROUTE) that you are currently prescribed, if more than one, separate them with a comma.');
+        JotForm.newDefaultTheme = false;
+        /*INIT-END*/
     });
+
 </script>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
@@ -46,6 +48,7 @@
     .form-radio-item label, .form-checkbox-item label, .form-grading-label, .form-header{
     color: false;
     }
+
 </style>
 
 <style type="text/css" id="form-designer-style">
@@ -197,11 +200,12 @@ margin-top: initial;
 /* Injected CSS Code */
 
 
+
 </style>
 
 <form class="jotform-form" action="{{ url_for('register') }}" method="post"
       name="registraion_form" id="registraion_form" accept-charset="utf-8" autocomplete="on">
-    
+
     <div role="main" class="form-all">
         <ul class="form-section page-section">
             <li id="cid_1" class="form-input-wide" data-type="control_head">
@@ -232,14 +236,15 @@ margin-top: initial;
                         </span>
                         <span class="form-sub-label-container " style="vertical-align:top" data-input-type="last">
                         <input type="text" id="lname" name="lname" class="form-textbox validate[required]" size="15"
-                               value="" data-component="last" aria-labelledby="label_234 sublabel_234_last" required=""/>
+                               value="" data-component="last" aria-labelledby="label_234 sublabel_234_last"
+                               required=""/>
                         <label class="form-sub-label" for="lname" id="sublabel_234_last" style="min-height:13px"
                                aria-hidden="false"> Last Name </label>
                         </span>
                     </div>
                 </div>
             </li>
-			<li class="form-line jf-required" data-type="control_fullname" id="id_2399">
+            <li class="form-line jf-required" data-type="control_fullname" id="id_2399">
                 <label class="form-label form-label-left form-label-auto" id="label_2399" for="fname">
                     Username
                     <span class="form-required"> </span>
@@ -289,22 +294,23 @@ margin-top: initial;
 *
                     </span>
                 </label>
-				<div class="row">
-					<div class="col-sm-6">
-						<form>
-							<div class="form-group">
-								<div class="input-group date" id="datepicker">
-									<input type="text" name="dob" class="form-control" />
-									<span class="input-group-addon">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <form>
+                            <div class="form-group">
+                                <div class="input-group date" id="datepicker">
+                                    <input type="text" name="dob" class="form-control"/>
+                                    <span class="input-group-addon">
 										<span class="glyphicon glyphicon-calendar"></span>
 									</span>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-				<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
-				<script >
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <script type="text/javascript"
+                        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+                <script>
 					$(function () {
 						$('#datepicker').datepicker({
 							format: "yyyy-mm-dd",
@@ -318,7 +324,8 @@ margin-top: initial;
 							orientation: "button"
 						});
 					});
-				</script>
+
+                </script>
             </li>
             <li class="form-line" data-type="control_dropdown" id="id_phone">
                 <label class="form-label form-label-left" id="label_phone" for="phone_num"> Phone Number: </label>
@@ -340,58 +347,68 @@ margin-top: initial;
                 <div id="cid_4" class="form-input">
                     <table summary="" class="form-address-table">
                         <tbody>
-                            <tr>
-                                <td colSpan="2">
+                        <tr>
+                            <td colSpan="2">
                                     <span class="form-sub-label-container " style="vertical-align:top">
                                         <input type="text" id="input_addr_line1" name="address_line1"
-                                               class="form-textbox form-address-line" value="" data-component="address_line_1"
+                                               class="form-textbox form-address-line" value=""
+                                               data-component="address_line_1"
                                                aria-labelledby="label_4 sublabel_4_addr_line1"/>
                                         <label class="form-sub-label" for="input_addr_line1" id="sublabel_4_addr_line1"
                                                style="min-height:13px" aria-hidden="false"> Street Address </label>
                                     </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan="2">
                                     <span class="form-sub-label-container " style="vertical-align:top">
                                         <input type="text" id="input_addr_line2" name="address_line2"
-                                               class="form-textbox form-address-line" size="46" value="" data-component="address_line_2"
+                                               class="form-textbox form-address-line" size="46" value=""
+                                               data-component="address_line_2"
                                                aria-labelledby="label_4 sublabel_4_addr_line2"/>
                                         <label class="form-sub-label" for="input_addr_line2" id="sublabel_4_addr_line2"
-                                               style="min-height:13px" aria-hidden="false"> Street Address Line 2 </label>
+                                               style="min-height:13px"
+                                               aria-hidden="false"> Street Address Line 2 </label>
                                     </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                     <span class="form-sub-label-container " style="vertical-align:top">
-                                        <input type="text" id="input_city" name="city" class="form-textbox form-address-city"
-                                               size="21" value="" data-component="city" aria-labelledby="label_4 sublabel_4_city"/>
-                                        <label class="form-sub-label" for="input_city" id="sublabel_4_city" style="min-height:13px"
+                                        <input type="text" id="input_city" name="city"
+                                               class="form-textbox form-address-city"
+                                               size="21" value="" data-component="city"
+                                               aria-labelledby="label_4 sublabel_4_city"/>
+                                        <label class="form-sub-label" for="input_city" id="sublabel_4_city"
+                                               style="min-height:13px"
                                                aria-hidden="false"> City </label>
                                     </span>
-                                </td>
-                                <td>
+                            </td>
+                            <td>
                                     <span class="form-sub-label-container " style="vertical-align:top">
                                         <input type="text" id="input_state" name="state"
-                                               class="form-textbox form-address-state" size="22" value="" data-component="state"
+                                               class="form-textbox form-address-state" size="22" value=""
+                                               data-component="state"
                                                aria-labelledby="label_4 sublabel_4_state"/>
-                                        <label class="form-sub-label" for="input_state" id="sublabel_4_state" style="min-height:13px"
+                                        <label class="form-sub-label" for="input_state" id="sublabel_4_state"
+                                               style="min-height:13px"
                                                aria-hidden="false"> State / Province </label>
                                     </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                     <span class="form-sub-label-container " style="vertical-align:top">
                                         <input type="text" id="input_postal" name="postal"
-                                               class="form-textbox form-address-postal" size="10" value="" data-component="zip"
+                                               class="form-textbox form-address-postal" size="10" value=""
+                                               data-component="zip"
                                                aria-labelledby="label_4 sublabel_4_postal"/>
-                                        <label class="form-sub-label" for="input_postal" id="sublabel_4_postal" style="min-height:13px"
+                                        <label class="form-sub-label" for="input_postal" id="sublabel_4_postal"
+                                               style="min-height:13px"
                                                aria-hidden="false"> Postal / Zip Code </label>
                                     </span>
-                                </td>
-                                <td>
+                            </td>
+                            <td>
                                     <span class="form-sub-label-container " style="vertical-align:top">
                                         <select class="form-dropdown form-address-country noTranslate" name="country"
                                                 id="input_country" data-component="country" required=""
@@ -430,11 +447,12 @@ margin-top: initial;
                                             </script>
 
                                         </select>
-                                        <label class="form-sub-label" for="input_country" id="sublabel_4_country" style="min-height:13px"
+                                        <label class="form-sub-label" for="input_country" id="sublabel_4_country"
+                                               style="min-height:13px"
                                                aria-hidden="false"> Country </label>
                                     </span>
-                                </td>
-                            </tr>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -458,7 +476,7 @@ margin-top: initial;
                             <input type="radio" class="form-radio" id="input_43_0" name="q43_takingAny" value="Yes"/>
                             <label id="label_input_43_0" for="input_43_0"> Yes </label>
                         </span>
-                         <span class="form-radio-item" style="clear:left">
+                        <span class="form-radio-item" style="clear:left">
                             <span class="dragger-item">
                             </span>
                             <input type="radio" class="form-radio" id="input_43_1" name="q43_takingAny" value="No"/>
@@ -468,32 +486,32 @@ margin-top: initial;
                 </div>
             </li>
             <li class="form-line" data-type="control_textarea" id="id_22">
-                <label class="form-label form-label-left" id="label_22" for="patient_register2"> If yes, please list it here </label>
+                <label class="form-label form-label-left" id="label_22" for="patient_register2"> If yes, please list it
+                    here </label>
                 <div id="cid_22" class="form-input">
                     <textarea id="patient_register2" class="form-textarea" name="q22_ifYes" cols="40" rows="6"
-                          data-component="textarea" aria-labelledby="label_22"></textarea>
-				</div>
-				</li>
-					<li class="form-line" data-type="control_button" id="id_2">
-						<div id="cid_2" class="form-input-wide">
-							<div style="margin-left:156px" data-align="auto" class="form-buttons-wrapper  ">
-								<button id="patient_register" type="submit" class="form-submit-button" data-component="button"
-										data-content="">
-									Submit Form
-								</button>
-							</div>
-						</div>
-					</li>
-				<li style="display:none">
-					Should be Empty:
-					<input type="text" name="website" value=""/>
-				</li>
-			</ul>
-		</div>
+                              data-component="textarea" aria-labelledby="label_22"></textarea>
+                </div>
+            </li>
+            <li class="form-line" data-type="control_button" id="id_2">
+                <div id="cid_2" class="form-input-wide">
+                    <div style="margin-left:156px" data-align="auto" class="form-buttons-wrapper  ">
+                        <button id="patient_register" type="submit" class="form-submit-button" data-component="button"
+                                data-content="">
+                            Submit Form
+                        </button>
+                    </div>
+                </div>
+            </li>
+            <li style="display:none">
+                Should be Empty:
+                <input type="text" name="website" value=""/>
+            </li>
+        </ul>
+    </div>
     <script>
   		JotForm.showJotFormPowered = "new_footer";
-
-	</script>
+    </script>
     <div class="formFooter-heightMask">
     </div>
 
