@@ -1,9 +1,10 @@
 import os
 from datetime import datetime
-from flask import Flask, render_template, request, send_from_directory, session
+from flask import Flask, render_template, request, send_from_directory, session, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from helper_methods.pred_methods import *
 from helper_methods.segmentation import *
+from helper_methods.forms import *
 from keras.models import load_model
 from keras import backend as K
 
@@ -55,15 +56,35 @@ class FundusImage(db.Model):
         return f"FundusImage('{self.stage}','{self.imageName}', '{self.date_added}')"
 
 @app.route('/')
+@app.route('/index')
 def index():
     #return render_template("upload_image.html")
     return render_template("index.html", title="Home")
+
+@app.route('/login', methods=["POST", "GET"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == 'admin@admin.com' and form.password.data == 'password':
+            flash('You have been logged in@', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('Login Unsuccessfull, Please check username and password', 'danger')
+    return render_template('login.html', title='login', form=form)
+
+@app.route('/registerUser', methods=["POST", "GET"])
+def registerUser():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        flash(f'Account created for {form.username.data}!', 'success')
+        return redirect(url_for('index'))
+    return render_template('register.html', title='register', form=form)
 
 @app.route('/registration')
 def navigate_registration():
     return render_template("registration.html", title="Register")
 
-@app.route('/registration', methods=["POST", "GET"])
+@app.route('/registration', methods=["POST"])
 def register():
     fname = request.form["fname"]
     lname = request.form["fname"]
