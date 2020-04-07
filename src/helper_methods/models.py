@@ -7,15 +7,15 @@ class Patients(db.Model):
     lname = db.Column(db.String(30), nullable=False)
     username = db.Column(db.String(30), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(50), nullable=False)
     sex = db.Column(db.String(6), nullable=False)
     dob = db.Column(db.Date(), nullable=False)
-    phoneno = db.Column(db.Integer, nullable=False)
+    phoneno = db.Column(db.String(16), nullable=False)
     address = db.Column(db.Text, nullable=False)
     city = db.Column(db.String(20), nullable=False)
     state = db.Column(db.String(30), nullable=False)
     zipcode = db.Column(db.Integer, nullable=False)
     country = db.Column(db.String(30), nullable=False)
-
 
     fundus = db.relationship('FundusImage', backref='patient', lazy='dynamic')
 

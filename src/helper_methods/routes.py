@@ -1,10 +1,11 @@
+import os
 from flask import render_template, request, send_from_directory, session, redirect, url_for, flash
 from helper_methods.forms import RegisterForm, LoginForm
 from helper_methods.pred_methods import *
 from helper_methods.segmentation import *
 from keras.models import load_model
 from helper_methods.models import Patients, FundusImage
-from helper_methods import app, db
+from helper_methods import app, db, bcrypt
 
 # parameters of the image
 HEIGHT = 224
@@ -34,8 +35,16 @@ def login():
 def registerUser():
     form = RegisterForm()
     if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('index'))
+        db.create_all()
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = Patients(fname=form.fname.data, lname=form.lname.data, username=form.username.data, email=form.email.data,
+                        password=hashed_password, sex=form.sex.data, dob=form.dob.data, phoneno=form.phone.data,
+                        address=form.address.data, city=form.city.data, state=form.state.data, zipcode=form.zipcode.data, country=form.country.data)
+        db.session.add(user)
+        db.session.commit()
+        session['phone'] = form.phone.data
+        flash(f'Your account has been created! You are now able to log in', 'success')
+        return redirect(url_for('login'))
     return render_template('register.html', title='register', form=form)
 
 @app.route('/registration')
@@ -48,19 +57,19 @@ def register():
     lname = request.form["fname"]
     username = request.form["username"]
     email_addr = request.form["email_addr"]
+    password = request.form["password"]
     sex = request.form["sex"]
     dob = request.form["dob"]
     phone_num = request.form["phone_num"]
-    address_line1 = request.form["address_line1"]
-    address_line2 = request.form["address_line2"]
+    postal_address = request.form["address_line1"]
     city = request.form["city"]
     state = request.form["state"]
     postal = request.form["postal"]
     country = request.form["country"]
 
     db.create_all()
-    patient_info = Patients(fname=fname, lname=lname, username=username, email=email_addr, sex=sex, dob=dob, phoneno=phone_num,
-                            address=address_line1+address_line2, city=city, state=state, zipcode=postal, country=country)
+    patient_info = Patients(fname=fname, lname=lname, username=username, email=email_addr, password=password, sex=sex, dob=dob, phoneno=phone_num,
+                            address=postal_address, city=city, state=state, zipcode=postal, country=country)
     print(patient_info)
     db.session.add(patient_info)
     db.session.commit()

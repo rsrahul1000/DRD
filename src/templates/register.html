@@ -1,11 +1,39 @@
 {% extends "layout.html" %}
 {% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/css/intlTelInput.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/intlTelInput.min.js"></script>
 <div class="content-section">
     <div class="container">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4"> Register Today</legend>
+                <dir class="form-group">
+                    {{ form.fname.label(class="form-control-label") }}
+                    {% if form.fname.errors %}
+                        {{ form.fname(class="form-control form-control-lg") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.fname.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.fname(class="form-control form-control-lg") }}
+                    {% endif %}
+                </dir>
+                <dir class="form-group">
+                    {{ form.lname.label(class="form-control-label") }}
+                    {% if form.lname.errors %}
+                        {{ form.lname(class="form-control form-control-lg") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.lname.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.lname(class="form-control form-control-lg") }}
+                    {% endif %}
+                </dir>
                 <dir class="form-group">
                     {{ form.username.label(class="form-control-label") }}
                     {% if form.username.errors %}
@@ -58,6 +86,110 @@
                         {{ form.confirm_password(class="form-control form-control-lg") }}
                     {% endif %}
                 </dir>
+                <dir class="form-group">
+                    {{ form.sex.label(class="form-control-label") }}
+                    {% if form.sex.errors %}
+                        {{ form.sex(class="form-control form-control-lg") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.sex.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.sex(class="form-control form-control-lg") }}
+                    {% endif %}
+                </dir>
+                <dir class="form-group">
+                    {{ form.dob.label(class="form-control-label") }}
+                    {% if form.dob.errors %}
+                        {{ form.dob(class="form-control form-control-lg") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.dob.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.dob(class="form-control form-control-lg") }}
+                    {% endif %}
+                </dir>
+                <dir class="form-group">
+                    {{ form.phone.label(class="form-control-label") }}
+                    {% if form.phone.errors %}
+                        {{ form.phone(class="form-control form-control-lg") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.phone.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.phone(class="form-control form-control-lg") }}
+                    {% endif %}
+                </dir>
+                <dir class="form-group">
+                    {{ form.address.label(class="form-control-label") }}
+                    {% if form.address.errors %}
+                        {{ form.address(class="form-control form-control-lg") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.address.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.address(class="form-control form-control-lg") }}
+                    {% endif %}
+                </dir>
+                <dir class="form-group">
+                    {{ form.city.label(class="form-control-label") }}
+                    {% if form.city.errors %}
+                        {{ form.city(class="form-control form-control-lg") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.city.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.city(class="form-control form-control-lg") }}
+                    {% endif %}
+                </dir>
+                <dir class="form-group">
+                    {{ form.state.label(class="form-control-label") }}
+                    {% if form.state.errors %}
+                        {{ form.state(class="form-control form-control-lg") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.state.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.state(class="form-control form-control-lg") }}
+                    {% endif %}
+                </dir>
+                <dir class="form-group">
+                    {{ form.zipcode.label(class="form-control-label") }}
+                    {% if form.zipcode.errors %}
+                        {{ form.zipcode(class="form-control form-control-lg") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.zipcode.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.zipcode(class="form-control form-control-lg") }}
+                    {% endif %}
+                </dir>
+                <dir class="form-group">
+                    {{ form.country.label(class="form-control-label") }}
+                    {% if form.country.errors %}
+                        {{ form.country(class="form-control form-control-lg") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.country.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.country(class="form-control form-control-lg") }}
+                    {% endif %}
+                </dir>
             </fieldset>
             <div class="form-group">
                 {{ form.submit(class="btn") }}
@@ -71,6 +203,22 @@
     </div>
 
 </div>
-
+{{ super() }}
+<script>
+    var wtf_phone_field = document.getElementById('phone');
+    wtf_phone_field.style.position = 'absolute';
+    wtf_phone_field.style.top = '-9999px';
+    wtf_phone_field.style.left = '-9999px';
+    wtf_phone_field.parentElement.insertAdjacentHTML('beforeend', '<div><input type="tel" id="_phone"></div>');
+    var fancy_phone_field = document.getElementById('_phone');
+    var fancy_phone_iti = window.intlTelInput(fancy_phone_field, {
+        separateDialCode: true,
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/utils.js",
+    });
+    fancy_phone_iti.setNumber(wtf_phone_field.value);
+    fancy_phone_field.addEventListener('blur', function() {
+        wtf_phone_field.value = fancy_phone_iti.getNumber();
+    });
+</script>
 
 {% endblock content %}
