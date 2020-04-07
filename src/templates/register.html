@@ -8,7 +8,7 @@
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4"> Register Today</legend>
-                <dir class="form-group">
+                <div class="form-group">
                     {{ form.fname.label(class="form-control-label") }}
                     {% if form.fname.errors %}
                         {{ form.fname(class="form-control form-control-lg") }}
@@ -20,8 +20,8 @@
                     {% else %}
                         {{ form.fname(class="form-control form-control-lg") }}
                     {% endif %}
-                </dir>
-                <dir class="form-group">
+                </div>
+                <div class="form-group">
                     {{ form.lname.label(class="form-control-label") }}
                     {% if form.lname.errors %}
                         {{ form.lname(class="form-control form-control-lg") }}
@@ -33,8 +33,8 @@
                     {% else %}
                         {{ form.lname(class="form-control form-control-lg") }}
                     {% endif %}
-                </dir>
-                <dir class="form-group">
+                </div>
+                <div class="form-group">
                     {{ form.username.label(class="form-control-label") }}
                     {% if form.username.errors %}
                         {{ form.username(class="form-control form-control-lg") }}
@@ -46,8 +46,8 @@
                     {% else %}
                         {{ form.username(class="form-control form-control-lg") }}
                     {% endif %}
-                </dir>
-                <dir class="form-group">
+                </div>
+                <div class="form-group">
                     {{ form.email.label(class="form-control-label") }}
                     {% if form.email.errors %}
                         {{ form.email(class="form-control form-control-lg") }}
@@ -59,8 +59,8 @@
                     {% else %}
                         {{ form.email(class="form-control form-control-lg") }}
                     {% endif %}
-                </dir>
-                <dir class="form-group">
+                </div>
+                <div class="form-group">
                     {{ form.password.label(class="form-control-label") }}
                     {% if form.password.errors %}
                         {{ form.password(class="form-control form-control-lg") }}
@@ -72,8 +72,8 @@
                     {% else %}
                         {{ form.password(class="form-control form-control-lg") }}
                     {% endif %}
-                </dir>
-                <dir class="form-group">
+                </div>
+                <div class="form-group">
                     {{ form.confirm_password.label(class="form-control-label") }}
                     {% if form.confirm_password.errors %}
                         {{ form.confirm_password(class="form-control form-control-lg") }}
@@ -85,8 +85,8 @@
                     {% else %}
                         {{ form.confirm_password(class="form-control form-control-lg") }}
                     {% endif %}
-                </dir>
-                <dir class="form-group">
+                </div>
+                <div class="form-group">
                     {{ form.sex.label(class="form-control-label") }}
                     {% if form.sex.errors %}
                         {{ form.sex(class="form-control form-control-lg") }}
@@ -98,8 +98,8 @@
                     {% else %}
                         {{ form.sex(class="form-control form-control-lg") }}
                     {% endif %}
-                </dir>
-                <dir class="form-group">
+                </div>
+                <div class="form-group">
                     {{ form.dob.label(class="form-control-label") }}
                     {% if form.dob.errors %}
                         {{ form.dob(class="form-control form-control-lg") }}
@@ -111,8 +111,8 @@
                     {% else %}
                         {{ form.dob(class="form-control form-control-lg") }}
                     {% endif %}
-                </dir>
-                <dir class="form-group">
+                </div>
+                <div class="form-group">
                     {{ form.phone.label(class="form-control-label") }}
                     {% if form.phone.errors %}
                         {{ form.phone(class="form-control form-control-lg") }}
@@ -124,8 +124,8 @@
                     {% else %}
                         {{ form.phone(class="form-control form-control-lg") }}
                     {% endif %}
-                </dir>
-                <dir class="form-group">
+                </div>
+                <div class="form-group">
                     {{ form.address.label(class="form-control-label") }}
                     {% if form.address.errors %}
                         {{ form.address(class="form-control form-control-lg") }}
@@ -137,8 +137,8 @@
                     {% else %}
                         {{ form.address(class="form-control form-control-lg") }}
                     {% endif %}
-                </dir>
-                <dir class="form-group">
+                </div>
+                <div class="form-group">
                     {{ form.city.label(class="form-control-label") }}
                     {% if form.city.errors %}
                         {{ form.city(class="form-control form-control-lg") }}
@@ -150,8 +150,8 @@
                     {% else %}
                         {{ form.city(class="form-control form-control-lg") }}
                     {% endif %}
-                </dir>
-                <dir class="form-group">
+                </div>
+                <div class="form-group">
                     {{ form.state.label(class="form-control-label") }}
                     {% if form.state.errors %}
                         {{ form.state(class="form-control form-control-lg") }}
@@ -163,8 +163,8 @@
                     {% else %}
                         {{ form.state(class="form-control form-control-lg") }}
                     {% endif %}
-                </dir>
-                <dir class="form-group">
+                </div>
+                <div class="form-group">
                     {{ form.zipcode.label(class="form-control-label") }}
                     {% if form.zipcode.errors %}
                         {{ form.zipcode(class="form-control form-control-lg") }}
@@ -176,8 +176,8 @@
                     {% else %}
                         {{ form.zipcode(class="form-control form-control-lg") }}
                     {% endif %}
-                </dir>
-                <dir class="form-group">
+                </div>
+                <div class="form-group">
                     {{ form.country.label(class="form-control-label") }}
                     {% if form.country.errors %}
                         {{ form.country(class="form-control form-control-lg") }}
@@ -189,7 +189,7 @@
                     {% else %}
                         {{ form.country(class="form-control form-control-lg") }}
                     {% endif %}
-                </dir>
+                </div>
             </fieldset>
             <div class="form-group">
                 {{ form.submit(class="btn") }}
@@ -203,7 +203,6 @@
     </div>
 
 </div>
-{{ super() }}
 <script>
     var wtf_phone_field = document.getElementById('phone');
     wtf_phone_field.style.position = 'absolute';

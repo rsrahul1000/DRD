@@ -21,6 +21,7 @@ class Patients(db.Model, UserMixin):
     state = db.Column(db.String(30), nullable=False)
     zipcode = db.Column(db.Integer, nullable=False)
     country = db.Column(db.String(30), nullable=False)
+    profile_image_file = db.Column(db.String(30), nullable=False, default='default.jpg')
 
     fundus = db.relationship('FundusImage', backref='patient', lazy='dynamic')
 

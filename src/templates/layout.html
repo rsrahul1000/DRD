@@ -49,6 +49,7 @@
                 <li class="nav-item"><a href="#services"> SERVICES</a></li>
                 <li class="nav-item"><a href="#contact"> CONTACT</a></li>
                 {% if current_user.is_authenticated %}
+                    <li class="nav-item"><a href="{{ url_for('account') }}"><span class="glyphicon glyphicon-user"></span> ACCOUNT</a></li>
                     <li class="nav-item"><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-user"></span> LOGOUT</a></li>
                 {% else %}
                     <li class="nav-item"><a href="{{ url_for('registerUser') }}"><span class="glyphicon glyphicon-user"></span> SIGN UP</a></li>

@@ -1,8 +1,10 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from wtforms.fields.html5 import DateField
 import phonenumbers
+from flask_login import current_user
 from helper_methods.models import Patients
 
 CountryList = [
@@ -280,3 +282,33 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+class UpdateAccountForm(FlaskForm):
+    fname = StringField('First Name', validators=[DataRequired()])
+    lname = StringField('Last Name', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    #password = PasswordField('Password', validators=[DataRequired()])
+    sex = SelectField('Sex', choices=[('M', 'Male'), ('F', 'Female'), ('O', 'Others')])
+    dob = DateField('Date Of Birth', format='%Y-%m-%d')
+    phone = StringField('Phone', validators=[DataRequired()])
+    address = StringField('Postal Address', validators=[DataRequired(), Length(min=2, max=200)])
+    city = StringField('City', validators=[DataRequired()])
+    state = StringField('State', validators=[DataRequired()])
+    zipcode = StringField('Zip Code', validators=[DataRequired()])
+    country = SelectField('Country', choices=CountryList)
+    picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg','png','jpeg'])])
+    submit = SubmitField('Update')
+
+    # template for validation format
+    def validate_username(self, username):
+        if username.data != current_user.username:
+            user = Patients.query.filter_by(username=username.data).first()
+            if user:
+                raise ValidationError('That username is taken. Please choose a different one')
+
+    def validate_email(self, email):
+        if email.data != current_user.email:
+            user = Patients.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError('That email is taken. Please choose a different one')

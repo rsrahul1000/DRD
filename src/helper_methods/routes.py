@@ -1,12 +1,14 @@
 import os
+import secrets
+from PIL import Image
 from flask import render_template, request, send_from_directory, session, redirect, url_for, flash
-from helper_methods.forms import RegisterForm, LoginForm
+from helper_methods.forms import RegisterForm, LoginForm, UpdateAccountForm
 from helper_methods.pred_methods import *
 from helper_methods.segmentation import *
 from keras.models import load_model
 from helper_methods.models import Patients, FundusImage
 from helper_methods import app, db, bcrypt
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 
 # parameters of the image
 HEIGHT = 224
@@ -31,7 +33,8 @@ def login():
         user = Patients.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
-            return redirect(url_for('index'))
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('index'))
         else:
             flash('Login Unsuccessful, Please check email and password', 'danger')
     return render_template('login.html', title='login', form=form)
@@ -59,9 +62,67 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/registration')
-def navigate_registration():
-    return render_template("registration.html", title="Register")
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    #Resize the image to 125x125 pix
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
+    return picture_fn
+
+@app.route('/account', methods=["POST", "GET"])
+@login_required
+def account():
+    profile_image_taregt = 'profile_pics/'
+    if not os.path.isdir(profile_image_taregt):
+        os.mkdir(profile_image_taregt)
+
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.profile_image_file = picture_file
+        current_user.fname = form.fname.data
+        current_user.lname = form.lname.data
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        current_user.sex = form.sex.data
+        current_user.dob = form.dob.data
+        current_user.phoneno = form.phone.data
+        current_user.address = form.address.data
+        current_user.city = form.city.data
+        current_user.state = form.state.data
+        current_user.zipcode = form.zipcode.data
+        current_user.country = form.country.data
+        db.session.commit()
+        flash('Your account has been updated!', 'success')
+        return redirect(url_for('account'))
+    elif request.method == 'GET':
+        form.fname.data = current_user.fname
+        form.lname.data = current_user.lname
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+        form.sex.data = current_user.sex
+        form.dob.data = current_user.dob
+        form.phone.data = current_user.phoneno
+        form.address.data = current_user.address
+        form.city.data = current_user.city
+        form.state.data = current_user.state
+        form.zipcode.data = current_user.zipcode
+        form.country.data = current_user.country
+    profile_image_file = url_for('static', filename=profile_image_taregt + current_user.profile_image_file)
+    return render_template('account.html', title='Account',
+                           profile_image_file=profile_image_file, form=form)
+
+@app.route('/upload_image')
+@login_required
+def upload_image():
+    return render_template("upload_image.html", title="Image Upload")
 
 @app.route('/registration', methods=["POST"])
 def register():
@@ -91,6 +152,7 @@ def register():
     return render_template("upload_image.html")
 
 @app.route('/upload_image', methods=["POST", "GET"])
+@login_required
 def upload():
     original_image_target = os.path.join(APP_ROOT, 'images/original_images/')
     preprocessed_image_target = os.path.join(APP_ROOT, 'images/preprocessed_images/')
@@ -152,7 +214,7 @@ def upload():
         hmag = haemorrhage(original_image_target, filename)
         cv2.imwrite(haemorrhage_target + filename, hmag)
 
-        fundus_image_patient = FundusImage(stage=stage, imageName=filename, patient_id=session['curr_patient'])
+        fundus_image_patient = FundusImage(stage=stage, imageName=filename, patient=current_user)
         print(fundus_image_patient)
         db.session.add(fundus_image_patient)
         db.session.commit()
