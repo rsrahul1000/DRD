@@ -6,6 +6,7 @@ from helper_methods.segmentation import *
 from keras.models import load_model
 from helper_methods.models import Patients, FundusImage
 from helper_methods import app, db, bcrypt
+from flask_login import login_user, current_user, logout_user
 
 # parameters of the image
 HEIGHT = 224
@@ -18,21 +19,27 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 @app.route('/index')
 def index():
     #return render_template("upload_image.html")
+    db.create_all()
     return render_template("index.html", title="Home")
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        if form.email.data == 'admin@admin.com' and form.password.data == 'password':
-            flash('You have been logged in@', 'success')
+        user = Patients.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
             return redirect(url_for('index'))
         else:
-            flash('Login Unsuccessfull, Please check username and password', 'danger')
+            flash('Login Unsuccessful, Please check email and password', 'danger')
     return render_template('login.html', title='login', form=form)
 
 @app.route('/registerUser', methods=["POST", "GET"])
 def registerUser():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = RegisterForm()
     if form.validate_on_submit():
         db.create_all()
@@ -46,6 +53,11 @@ def registerUser():
         flash(f'Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='register', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 @app.route('/registration')
 def navigate_registration():

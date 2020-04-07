@@ -1,13 +1,18 @@
-from helper_methods import db
+from helper_methods import db, login_manager
+from flask_login import UserMixin
 from datetime import datetime
 
-class Patients(db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+    return Patients.query.get(int(user_id))
+
+class Patients(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     fname = db.Column(db.String(30), nullable=False)
     lname = db.Column(db.String(30), nullable=False)
     username = db.Column(db.String(30), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(100), nullable=False)
     sex = db.Column(db.String(6), nullable=False)
     dob = db.Column(db.Date(), nullable=False)
     phoneno = db.Column(db.String(16), nullable=False)
@@ -32,3 +37,6 @@ class FundusImage(db.Model):
 
     def __repr__(self):
         return f"FundusImage('{self.stage}','{self.imageName}', '{self.date_added}')"
+
+#Supposed to be called after creating all tables, to create tables in database if not exists
+db.create_all()
