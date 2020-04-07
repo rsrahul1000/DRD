@@ -1,59 +1,17 @@
-import os
-from datetime import datetime
-from flask import Flask, render_template, request, send_from_directory, session, redirect, url_for, flash
-from flask_sqlalchemy import SQLAlchemy
+from flask import render_template, request, send_from_directory, session, redirect, url_for, flash
+from helper_methods.forms import RegisterForm, LoginForm
 from helper_methods.pred_methods import *
 from helper_methods.segmentation import *
-from helper_methods.forms import *
 from keras.models import load_model
-from keras import backend as K
-
-__author__ = 'rahul'
-
-app = Flask(__name__)
-app.config.from_pyfile('config.cfg')
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-
-db = SQLAlchemy(app)
+from helper_methods.models import Patients, FundusImage
+from helper_methods import app, db
 
 # parameters of the image
 HEIGHT = 224
 WIDTH = 224
 # loading the pretraiend model
 model = None
-
-
-class Patients(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    fname = db.Column(db.String(30), nullable=False)
-    lname = db.Column(db.String(30), nullable=False)
-    username = db.Column(db.String(30), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    sex = db.Column(db.String(6), nullable=False)
-    dob = db.Column(db.Date(), nullable=False)
-    phoneno = db.Column(db.Integer, nullable=False)
-    address = db.Column(db.Text, nullable=False)
-    city = db.Column(db.String(20), nullable=False)
-    state = db.Column(db.String(30), nullable=False)
-    zipcode = db.Column(db.Integer, nullable=False)
-    country = db.Column(db.String(30), nullable=False)
-
-
-    fundus = db.relationship('FundusImage', backref='patient', lazy='dynamic')
-
-    def __repr__(self):
-        return f"Patient('{self.fname}','{self.lname}', '{self.email}')"
-
-class FundusImage(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    stage = db.Column(db.Integer, nullable=False)
-    imageName = db.Column(db.String(50), nullable=False)
-    date_added = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
-    patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'), nullable=False) #Foriegn key to the patients table
-
-    def __repr__(self):
-        return f"FundusImage('{self.stage}','{self.imageName}', '{self.date_added}')"
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 @app.route('/')
 @app.route('/index')
@@ -208,9 +166,3 @@ def get_gallery():
     original_image_target = os.path.join(APP_ROOT, 'images/original_images')
     print(image_names)
     return render_template("gallery.html", image_names=image_names, original_path=original_image_target)
-
-
-if __name__ == "__main__":
-    app.debug = True
-    # os.environ['PYTHONPATH'] = os.getcwd()
-    app.run(host='0.0.0.0', port=5005)  # , use_reloader=False)
