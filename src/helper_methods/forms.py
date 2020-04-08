@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from wtforms.fields.html5 import DateField
 import phonenumbers
@@ -312,3 +312,8 @@ class UpdateAccountForm(FlaskForm):
             user = Patients.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('That email is taken. Please choose a different one')
+
+class DiagnoseForm(FlaskForm):
+    side = SelectField('Side', choices=[('L', 'Left'), ('R', 'Right')])
+    picture = FileField('Upload Fundus Image', validators=[FileAllowed(['jpg','png','jpeg'])])
+    submit = SubmitField('Diagnose')

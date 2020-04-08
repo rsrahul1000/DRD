@@ -2,7 +2,7 @@ import os
 import secrets
 from PIL import Image
 from flask import render_template, request, send_from_directory, session, redirect, url_for, flash
-from helper_methods.forms import RegisterForm, LoginForm, UpdateAccountForm
+from helper_methods.forms import RegisterForm, LoginForm, UpdateAccountForm, DiagnoseForm
 from helper_methods.pred_methods import *
 from helper_methods.segmentation import *
 from keras.models import load_model
@@ -11,6 +11,8 @@ from helper_methods import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
 
 # parameters of the image
+from scipy.sparse import dia_matrix
+
 HEIGHT = 224
 WIDTH = 224
 # loading the pretraiend model
@@ -62,11 +64,11 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-def save_picture(form_picture):
+def save_profile_picture(form_picture, image_path):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    picture_path = os.path.join(image_path, picture_fn)
     #Resize the image to 125x125 pix
     output_size = (125, 125)
     i = Image.open(form_picture)
@@ -78,14 +80,15 @@ def save_picture(form_picture):
 @app.route('/account', methods=["POST", "GET"])
 @login_required
 def account():
-    profile_image_taregt = 'profile_pics/'
-    if not os.path.isdir(profile_image_taregt):
-        os.mkdir(profile_image_taregt)
+    profile_image_target = 'profile_pics/'
+    saving_path_profile_target = os.path.join(app.root_path, 'static/profile_pics')
+    if not os.path.isdir(profile_image_target):
+        os.mkdir(profile_image_target)
 
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
-            picture_file = save_picture(form.picture.data)
+            picture_file = save_profile_picture(form.picture.data, saving_path_profile_target)
             current_user.profile_image_file = picture_file
         current_user.fname = form.fname.data
         current_user.lname = form.lname.data
@@ -115,9 +118,108 @@ def account():
         form.state.data = current_user.state
         form.zipcode.data = current_user.zipcode
         form.country.data = current_user.country
-    profile_image_file = url_for('static', filename=profile_image_taregt + current_user.profile_image_file)
+    profile_image_file = url_for('static', filename=profile_image_target + current_user.profile_image_file)
     return render_template('account.html', title='Account',
                            profile_image_file=profile_image_file, form=form)
+
+def save_oroginal_picture(form_picture, image_path):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(image_path, picture_fn)
+    form_picture.save(picture_path)
+
+    return picture_fn
+
+@app.route('/diagnose/new', methods=["POST", "GET"])
+@login_required
+def new_diagnose():
+    original_image_target = os.path.join(APP_ROOT, 'images/original_images/')
+    preprocessed_image_target = os.path.join(APP_ROOT, 'images/preprocessed_images/')
+    segment_MA_target = os.path.join(APP_ROOT, 'images/microaneurysms/')
+    exudates_target = os.path.join(APP_ROOT, 'images/exudates/')
+    blood_vessels_target = os.path.join(APP_ROOT, 'images/blood_vessels/')
+    haemorrhage_target = os.path.join(APP_ROOT, 'images/haemorrhage/')
+    if not os.path.isdir(original_image_target):
+        os.mkdir(original_image_target)
+
+    if not os.path.isdir(preprocessed_image_target):
+        os.mkdir(preprocessed_image_target)
+
+    if not os.path.isdir(segment_MA_target):
+        os.mkdir(segment_MA_target)
+
+    if not os.path.isdir(exudates_target):
+        os.mkdir(exudates_target)
+
+    if not os.path.isdir(blood_vessels_target):
+        os.mkdir(blood_vessels_target)
+
+    if not os.path.isdir(haemorrhage_target):
+        os.mkdir(haemorrhage_target)
+
+    with graph.as_default():
+        model = load_model('Trained_models/VGG19 Trained Model.h5')
+
+    form = DiagnoseForm()
+    if form.validate_on_submit():
+        flash('Your Diagnose has been done!', 'success')
+        if form.picture.data:
+            filename = save_oroginal_picture(form.picture.data, original_image_target)
+            preprocessed_destination_file = "".join([preprocessed_image_target, filename])
+            print(filename)
+            print(preprocessed_destination_file)
+
+            # preprocessing
+            preprocess_image(original_image_target, preprocessed_image_target, filename, HEIGHT, WIDTH)
+            tim = cv2.imread(preprocessed_destination_file)
+            tim = cv2.cvtColor(tim, cv2.COLOR_BGR2RGB)
+            preds, stage = prediction(model, tim)
+            print(preds)
+            print(stage)
+
+            if stage > 0:
+                # Microaneuryms
+                gray_blobs, microaneurysms_image = MA(original_image_target, filename)
+                cv2.imwrite(segment_MA_target + filename, cv2.cvtColor(microaneurysms_image, cv2.COLOR_RGB2BGR))
+
+                # Exudates
+                ex = exudate(original_image_target, filename)
+                cv2.imwrite(exudates_target + filename, ex)  # cv2.cvtColor(ex, cv2.COLOR_RGB2BGR))
+
+                # Blood Vessels
+                bv = extract_bv(original_image_target, filename)
+                cv2.imwrite(blood_vessels_target + filename, bv)  # cv2.cvtColor(bv, cv2.COLOR_RGB2BGR))
+
+                # haemorrhages
+                hmag = haemorrhage(original_image_target, filename)
+                cv2.imwrite(haemorrhage_target + filename, hmag)
+
+                fundus_image_patient = FundusImage(stage=stage, imageName=filename,side=form.side.data , patient=current_user)
+                print(fundus_image_patient)
+                db.session.add(fundus_image_patient)
+                db.session.commit()
+
+            return render_template("result.html",
+                                   image_name=filename,
+                                   stage=stage,
+                                   preds=preds,
+                                   original_path=original_image_target,
+                                   preprocessed_path=preprocessed_image_target,
+                                   microaneurysms_path=segment_MA_target,
+                                   exudates_path=exudates_target,
+                                   blood_vessels_path=blood_vessels_target,
+                                   haemorrhage_path=haemorrhage_target)
+
+        return redirect(url_for('result'))
+    return render_template('create_diagnose.html', title='New Diagnose', form=form)
+
+@app.route('/diagnose')
+@login_required
+def existing_diagnose():
+    original_image_target = os.path.join(APP_ROOT, 'images/original_images/')
+    diagnosis = FundusImage.query.all()
+    return render_template('existing_diagnose.html', diagnosis=diagnosis, original_path=original_image_target)
 
 @app.route('/upload_image')
 @login_required

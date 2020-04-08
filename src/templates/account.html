@@ -1,8 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<br>
-<br>
-<br>
+
     <div class="container">
         <div class="content-section">
             <div class="media">
@@ -22,27 +20,27 @@
                             <div class="form-group">
                                 {{ form.fname.label(class="form-control-label") }}
                                 {% if form.fname.errors %}
-                                {{ form.fname(class="form-control form-control-lg") }}
+                                {{ form.fname(class="form-control form-control-md ") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.fname.errors %}
                                     <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.fname(class="form-control form-control-lg") }}
+                                {{ form.fname(class="form-control form-control-md ") }}
                                 {% endif %}
                             </div>
                             <div class="form-group">
                                 {{ form.lname.label(class="form-control-label") }}
                                 {% if form.lname.errors %}
-                                {{ form.lname(class="form-control form-control-lg") }}
+                                {{ form.lname(class="form-control form-control-md ") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.lname.errors %}
                                     <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.lname(class="form-control form-control-lg") }}
+                                {{ form.lname(class="form-control form-control-md ") }}
                                 {% endif %}
                             </div>
                             <div class="form-group">
@@ -55,125 +53,125 @@
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.username(class="form-control form-control-lg") }}
+                                {{ form.username(class="form-control form-control-md ") }}
                                 {% endif %}
                             </div>
                             <div class="form-group">
                                 {{ form.email.label(class="form-control-label") }}
                                 {% if form.email.errors %}
-                                {{ form.email(class="form-control form-control-lg") }}
+                                {{ form.email(class="form-control form-control-md") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.email.errors %}
                                     <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.email(class="form-control form-control-lg") }}
+                                {{ form.email(class="form-control form-control-md ") }}
                                 {% endif %}
                             </div>
 
                             <div class="form-group">
                                 {{ form.sex.label(class="form-control-label") }}
                                 {% if form.sex.errors %}
-                                {{ form.sex(class="form-control form-control-lg") }}
+                                {{ form.sex(class="form-control form-control-md ") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.sex.errors %}
                                     <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.sex(class="form-control form-control-lg") }}
+                                {{ form.sex(class="form-control form-control-md ") }}
                                 {% endif %}
                             </div>
                             <div class="form-group">
                                 {{ form.dob.label(class="form-control-label") }}
                                 {% if form.dob.errors %}
-                                {{ form.dob(class="form-control form-control-lg") }}
+                                {{ form.dob(class="form-control form-control-md ") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.dob.errors %}
                                     <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.dob(class="form-control form-control-lg") }}
+                                {{ form.dob(class="form-control form-control-md ") }}
                                 {% endif %}
                             </div>
                             <div class="form-group">
                                 {{ form.phone.label(class="form-control-label") }}
                                 {% if form.phone.errors %}
-                                {{ form.phone(class="form-control form-control-lg") }}
+                                {{ form.phone(class="form-control form-control-md ") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.phone.errors %}
                                     <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.phone(class="form-control form-control-lg") }}
+                                {{ form.phone(class="form-control form-control-md ") }}
                                 {% endif %}
                             </div>
                             <div class="form-group">
                                 {{ form.address.label(class="form-control-label") }}
                                 {% if form.address.errors %}
-                                {{ form.address(class="form-control form-control-lg") }}
+                                {{ form.address(class="form-control form-control-md ") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.address.errors %}
                                     <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.address(class="form-control form-control-lg") }}
+                                {{ form.address(class="form-control form-control-md ") }}
                                 {% endif %}
                             </div>
                             <div class="form-group">
                                 {{ form.city.label(class="form-control-label") }}
                                 {% if form.city.errors %}
-                                {{ form.city(class="form-control form-control-lg") }}
+                                {{ form.city(class="form-control form-control-md ") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.city.errors %}
                                     <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.city(class="form-control form-control-lg") }}
+                                {{ form.city(class="form-control form-control-md ") }}
                                 {% endif %}
                             </div>
                             <div class="form-group">
                                 {{ form.state.label(class="form-control-label") }}
                                 {% if form.state.errors %}
-                                {{ form.state(class="form-control form-control-lg") }}
+                                {{ form.state(class="form-control form-control-md ") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.state.errors %}
                                     <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.state(class="form-control form-control-lg") }}
+                                {{ form.state(class="form-control form-control-md ") }}
                                 {% endif %}
                             </div>
                             <div class="form-group">
                                 {{ form.zipcode.label(class="form-control-label") }}
                                 {% if form.zipcode.errors %}
-                                {{ form.zipcode(class="form-control form-control-lg") }}
+                                {{ form.zipcode(class="form-control form-control-md ") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.zipcode.errors %}
                                     <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.zipcode(class="form-control form-control-lg") }}
+                                {{ form.zipcode(class="form-control form-control-md ") }}
                                 {% endif %}
                             </div>
                             <div class="form-group">
                                 {{ form.country.label(class="form-control-label") }}
                                 {% if form.country.errors %}
-                                {{ form.country(class="form-control form-control-lg") }}
+                                {{ form.country(class="form-control form-control-md ") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.country.errors %}
                                     <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.country(class="form-control form-control-lg") }}
+                                {{ form.country(class="form-control form-control-md ") }}
                                 {% endif %}
                             </div>
                             <div class="form-group">

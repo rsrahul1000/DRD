@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <div class="content-section">
+        <div class="container">
+            <form method="POST" action="" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4"> New Diagnose</legend>
+
+                    <div class="form-group">
+                        {{ form.side.label(class="form-control-label") }}
+                        <small> (with respect to the patient) </small>
+                        {% if form.side.errors %}
+                        {{ form.side(class="form-control form-control-lg") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.side.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.side(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.picture.label() }}
+                        {{ form.picture(class="form-control-file") }}
+                        {% if form.picture.errors %}
+                            {% for error in form.picture.errors %}
+                            <span class="text-danger">{{ error }}</span></br>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    {{ form.submit(class="btn") }}
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock content %}

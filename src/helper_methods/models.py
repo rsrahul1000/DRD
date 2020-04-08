@@ -33,7 +33,7 @@ class FundusImage(db.Model):
     stage = db.Column(db.Integer, nullable=False)
     imageName = db.Column(db.String(50), nullable=False)
     date_added = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
+    side = db.Column(db.String(2), nullable=False)
     patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'), nullable=False) #Foriegn key to the patients table
 
     def __repr__(self):

@@ -32,7 +32,7 @@
 
 </head>
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
-
+<nav class="navbar navbar-default"></nav>
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -48,7 +48,14 @@
                 <li class="nav-item"><a href="#about"> ABOUT</a></li>
                 <li class="nav-item"><a href="#services"> SERVICES</a></li>
                 <li class="nav-item"><a href="#contact"> CONTACT</a></li>
+
                 {% if current_user.is_authenticated %}
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">DIAGNOSIS<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-item"><a href="{{ url_for('existing_diagnose') }}"><span class="glyphicon glyphicon-user"></span> EXISITING DIAGNOSE</a></li>
+                          <li class="nav-item"><a href="{{ url_for('new_diagnose') }}"><span class="glyphicon glyphicon-user"></span> NEW DIAGNOSE</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item"><a href="{{ url_for('account') }}"><span class="glyphicon glyphicon-user"></span> ACCOUNT</a></li>
                     <li class="nav-item"><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-user"></span> LOGOUT</a></li>
                 {% else %}
