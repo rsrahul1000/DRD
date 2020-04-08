@@ -1,7 +1,7 @@
 import os
 import secrets
 from PIL import Image
-from flask import render_template, request, send_from_directory, session, redirect, url_for, flash
+from flask import render_template, request, send_from_directory, session, redirect, url_for, flash, abort
 from helper_methods.forms import RegisterForm, LoginForm, UpdateAccountForm, DiagnoseForm
 from helper_methods.pred_methods import *
 from helper_methods.segmentation import *
@@ -18,6 +18,12 @@ WIDTH = 224
 # loading the pretraiend model
 model = None
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+original_image_target = os.path.join(APP_ROOT, 'images/original_images/')
+preprocessed_image_target = os.path.join(APP_ROOT, 'images/preprocessed_images/')
+segment_MA_target = os.path.join(APP_ROOT, 'images/microaneurysms/')
+exudates_target = os.path.join(APP_ROOT, 'images/exudates/')
+blood_vessels_target = os.path.join(APP_ROOT, 'images/blood_vessels/')
+haemorrhage_target = os.path.join(APP_ROOT, 'images/haemorrhage/')
 
 @app.route('/')
 @app.route('/index')
@@ -134,12 +140,7 @@ def save_oroginal_picture(form_picture, image_path):
 @app.route('/diagnose/new', methods=["POST", "GET"])
 @login_required
 def new_diagnose():
-    original_image_target = os.path.join(APP_ROOT, 'images/original_images/')
-    preprocessed_image_target = os.path.join(APP_ROOT, 'images/preprocessed_images/')
-    segment_MA_target = os.path.join(APP_ROOT, 'images/microaneurysms/')
-    exudates_target = os.path.join(APP_ROOT, 'images/exudates/')
-    blood_vessels_target = os.path.join(APP_ROOT, 'images/blood_vessels/')
-    haemorrhage_target = os.path.join(APP_ROOT, 'images/haemorrhage/')
+
     if not os.path.isdir(original_image_target):
         os.mkdir(original_image_target)
 
@@ -203,7 +204,6 @@ def new_diagnose():
             return render_template("result.html",
                                    image_name=filename,
                                    stage=stage,
-                                   preds=preds,
                                    original_path=original_image_target,
                                    preprocessed_path=preprocessed_image_target,
                                    microaneurysms_path=segment_MA_target,
@@ -212,7 +212,8 @@ def new_diagnose():
                                    haemorrhage_path=haemorrhage_target)
 
         return redirect(url_for('result'))
-    return render_template('create_diagnose.html', title='New Diagnose', form=form)
+    return render_template('create_diagnose.html', title='New Diagnose',
+                           form=form, legend='New Diagnose')
 
 @app.route('/diagnose')
 @login_required
@@ -220,6 +221,58 @@ def existing_diagnose():
     original_image_target = os.path.join(APP_ROOT, 'images/original_images/')
     diagnosis = FundusImage.query.all()
     return render_template('existing_diagnose.html', diagnosis=diagnosis, original_path=original_image_target)
+
+@app.route('/diagnose/<int:diagnose_id>')
+@login_required
+def diagnose(diagnose_id):
+    diag = FundusImage.query.get_or_404(diagnose_id)
+    return render_template("result.html",
+                           image_name=diag.imageName,
+                           stage=diag.stage,
+                           original_path=original_image_target,
+                           preprocessed_path=preprocessed_image_target,
+                           microaneurysms_path=segment_MA_target,
+                           exudates_path=exudates_target,
+                           blood_vessels_path=blood_vessels_target,
+                           haemorrhage_path=haemorrhage_target,
+                           diagnose=diag,
+                           title='result')
+
+@app.route("/diagnose/<int:diagnose_id>/update", methods=["POST", "GET"])
+@login_required
+def update_diagnose(diagnose_id):
+    diag = FundusImage.query.get_or_404(diagnose_id)
+    if diag.patient != current_user:
+        abort(403)
+    form = DiagnoseForm()
+    if form.validate_on_submit():
+        diag.side = form.side.data
+        db.session.commit()
+        flash('You Diagnosis has been updated!', 'success')
+        return redirect(url_for('existing_diagnose'))
+    elif request.method == 'GET':
+        form.side.data = diag.side
+    return render_template('create_diagnose.html', title='Update Diagnose',
+                           form=form, legend='Update Diagnose')
+
+@app.route("/diagnose/<int:diagnose_id>/delete", methods=["POST"])
+@login_required
+def delete_diagnose(diagnose_id):
+    diag = FundusImage.query.get_or_404(diagnose_id)
+    if diag.patient != current_user:
+        abort(403)
+    print(diag.imageName)
+    #delete all the images except the original one
+    os.remove(preprocessed_image_target+diag.imageName)
+    os.remove(segment_MA_target+diag.imageName)
+    os.remove(exudates_target+diag.imageName)
+    os.remove(blood_vessels_target+diag.imageName)
+    os.remove(haemorrhage_target+diag.imageName)
+    #delete from the database
+    db.session.delete(diag)
+    db.session.commit()
+    flash('You Diagnosis has been deleted!', 'success')
+    return redirect(url_for('existing_diagnose'))
 
 @app.route('/upload_image')
 @login_required

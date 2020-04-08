@@ -316,4 +316,4 @@ class UpdateAccountForm(FlaskForm):
 class DiagnoseForm(FlaskForm):
     side = SelectField('Side', choices=[('L', 'Left'), ('R', 'Right')])
     picture = FileField('Upload Fundus Image', validators=[FileAllowed(['jpg','png','jpeg'])])
-    submit = SubmitField('Diagnose')
+    submit = SubmitField('Submit')

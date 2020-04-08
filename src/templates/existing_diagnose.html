@@ -3,25 +3,34 @@
 
     {% for diagnose in diagnosis %}
         <article class="media content-section col-md-6 col-md-offset-3">
+
             <img class="img-circle " style="width:100px" src="{{ url_for('send_original_image',path=original_path, filename=diagnose.imageName) }}">
             <div class="media-body">
+
                 <div class="article-metadata">
-                    <a class="mr-2" href="#">{{ diagnose.patient.fname }}</a>
+                    {{ diagnose.patient.fname }}
                     <small class="text-muted">{{ diagnose.date_added.strftime('%Y-%m-%d') }}</small>
                 </div>
-                {% if diagnose.stage == 0 %}
-                    <h1>No Diabetic Retinopathy</h1>
-                {% elif diagnose.stage == 1 %}
-                    <h1>Mild Non-proliferative Diabetic Retinopathy</h1>
-                {% elif diagnose.stage == 2 %}
-                    <h1>Moderate Non-proliferative Diabetic Retinopathy</h1>
-                {% elif diagnose.stage == 3 %}
-                    <h1>Sever Non-proliferative Diabetic Retinopathy</h1>
-                {% else %}
-                <h1>Proliferative Diabetic Retinopathy</h1>
+                {% if diagnose.patient == current_user %}
+                    <div>
+                        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_diagnose', diagnose_id=diagnose.id) }}">Update</a>
+                        <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModalCenter">Delete</button>
+                    </div>
                 {% endif %}
-
-                <h2><a class="article-title" href="#">Stage: {{ diagnose.stage }}</a> </h2>
+                <a class="article-title" href="{{ url_for('diagnose', diagnose_id=diagnose.id) }}">
+                    {% if diagnose.stage == 0 %}
+                        <h1>No Diabetic Retinopathy</h1>
+                    {% elif diagnose.stage == 1 %}
+                        <h1>Mild Non-proliferative Diabetic Retinopathy</h1>
+                    {% elif diagnose.stage == 2 %}
+                        <h1>Moderate Non-proliferative Diabetic Retinopathy</h1>
+                    {% elif diagnose.stage == 3 %}
+                        <h1>Sever Non-proliferative Diabetic Retinopathy</h1>
+                    {% else %}
+                    <h1>Proliferative Diabetic Retinopathy</h1>
+                    {% endif %}
+                </a>
+                <h2>Stage: {{ diagnose.stage }} </h2>
 
                 {% if diagnose.side == 'L' %}
                     <p class="'article-content">Side: Left</p>
@@ -31,5 +40,25 @@
 
             </div>
         </article>
+        <!-- Modal -->
+        <div class="modal fade" id="deleteModalCenter" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLongTitle">Delete Diagnose?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <form action="{{ url_for('delete_diagnose', diagnose_id=diagnose.id) }}" method="POST">
+                            <input class="btn btn-danger" type="submit" value="Delete">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endfor %}
 {% endblock content %}
