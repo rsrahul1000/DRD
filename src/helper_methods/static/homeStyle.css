@@ -178,6 +178,7 @@ footer .glyphicon {
     }
 }
 .btn {
+    display: inline-block;
     background-color:#701f05;
     border: none;
     color: white;

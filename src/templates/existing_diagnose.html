@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
-
-    {% for diagnose in diagnosis %}
+    <h1 class="col-md-6 col-md-offset-3 mb-3">Total Diagnosed: {{ diagnosis.total }}</h1>
+    {% for diagnose in diagnosis.items %}
         <article class="media content-section col-md-6 col-md-offset-3">
 
             <img class="img-circle " style="width:100px" src="{{ url_for('send_original_image',path=original_path, filename=diagnose.imageName) }}">
@@ -61,4 +61,17 @@
             </div>
         </div>
     {% endfor %}
+    <div class="media col-md-6 col-md-offset-3 m-1 p-md">
+    {% for page_num in diagnosis.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if diagnosis.page == page_num %}
+                <a class="btn btn-outline-info mb-4" style="background-color: #4CAF50;"  href="{{ url_for('existing_diagnose', page=page_num) }}">{{ page_num }}</a>
+            {% else %}
+                <a class="btn btn-info mb-4" href="{{ url_for('existing_diagnose', page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+    </div>
 {% endblock content %}
