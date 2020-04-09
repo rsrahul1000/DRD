@@ -2,8 +2,6 @@ body {
     font: 400 15px Lato, sans-serif;
     line-height: 1.8;
     color: #818181;
-    padding-top: 65px;
-
 }
 h2 {
     font-size: 24px;
@@ -129,6 +127,7 @@ color: #701f05 !important;
     border-color: transparent;
     color: #fff !important;
 }
+
 footer .glyphicon {
     font-size: 20px;
     margin-bottom: 20px;

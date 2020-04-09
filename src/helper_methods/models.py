@@ -1,4 +1,5 @@
-from helper_methods import db, login_manager
+from helper_methods import db, login_manager, app
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_login import UserMixin
 from datetime import datetime
 
@@ -24,6 +25,19 @@ class Patients(db.Model, UserMixin):
     profile_image_file = db.Column(db.String(30), nullable=False, default='default.jpg')
 
     fundus = db.relationship('FundusImage', backref='patient', lazy='dynamic')
+
+    def get_reset_token(self, expires_sec=1800):
+        s = Serializer(app.config['SECRET_KEY'], expires_sec)
+        return s.dumps({'user_id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_reset_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return Patients.query.get(user_id)
 
     def __repr__(self):
         return f"Patient('{self.fname}','{self.lname}', '{self.email}')"

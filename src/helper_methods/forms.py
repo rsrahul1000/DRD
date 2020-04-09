@@ -317,3 +317,19 @@ class DiagnoseForm(FlaskForm):
     side = SelectField('Side', choices=[('L', 'Left'), ('R', 'Right')])
     picture = FileField('Upload Fundus Image', validators=[FileAllowed(['jpg','png','jpeg'])])
     submit = SubmitField('Submit')
+
+class RequestResetForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Request Password Reset')
+
+    def validate_email(self, email):
+        user = Patients.query.filter_by(email=email.data).first()
+        if user is None:
+            raise ValidationError('There is no account with that email. You must register first.')
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset Password')
+
+
