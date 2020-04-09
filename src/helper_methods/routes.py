@@ -320,7 +320,7 @@ def reset_token(token):
         return redirect(url_for('login'))
     return render_template('reset_token.html', title="Reset Password", form=form)
 
-
+'''
 @app.route('/upload_image')
 @login_required
 def upload_image():
@@ -435,7 +435,7 @@ def upload():
 # @app.route('/upload/<filename>')
 # def send_image(filename):
 #    return send_from_directory("images", filename)
-
+'''
 @app.route('/upload', methods=['GET'])
 def send_original_image():
     path = request.args.get('path')
