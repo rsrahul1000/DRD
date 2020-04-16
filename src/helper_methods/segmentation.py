@@ -92,6 +92,7 @@ def MA(base_path, image_id):
 
     return 'np'
 
+
 def extract_bv(base_path, image_id):
     image = cv2.imread(base_path + image_id)
     b, green_fundus, r = cv2.split(image)
@@ -217,3 +218,4 @@ def haemorrhage(base_path, image_id):
     opening = cv2.morphologyEx(thresh2, cv2.MORPH_OPEN, (10, 10))
 
     return opening
+

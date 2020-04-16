@@ -19,6 +19,7 @@ WIDTH = 224
 # loading the pretraiend model
 model = None
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 original_image_target = os.path.join(APP_ROOT, 'images/original_images/')
 preprocessed_image_target = os.path.join(APP_ROOT, 'images/preprocessed_images/')
 segment_MA_target = os.path.join(APP_ROOT, 'images/microaneurysms/')
@@ -197,10 +198,10 @@ def new_diagnose():
                 hmag = haemorrhage(original_image_target, filename)
                 cv2.imwrite(haemorrhage_target + filename, hmag)
 
-                fundus_image_patient = FundusImage(stage=stage, imageName=filename,side=form.side.data , patient=current_user)
-                print(fundus_image_patient)
-                db.session.add(fundus_image_patient)
-                db.session.commit()
+            fundus_image_patient = FundusImage(stage=stage, imageName=filename,side=form.side.data , patient=current_user)
+            print(fundus_image_patient)
+            db.session.add(fundus_image_patient)
+            db.session.commit()
 
             return render_template("result.html",
                                    image_name=filename,

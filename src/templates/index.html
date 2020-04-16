@@ -36,9 +36,9 @@
         <div class="col-sm-4">
             <div>
                 {% if current_user.is_authenticated %}
-                    <button class="btn"><i class="fa fa-user-md fa-5x"></i><a href="{{ url_for('upload_image') }}"></button>
+                <button class="btn"><i class="fa fa-user-md fa-5x"></i><a href="{{ url_for('new_diagnose') }}"></a></button>
                 {% else %}
-                    <button class="btn"><i class="fa fa-user-md fa-5x"></i><a href="{{ url_for('login') }}"></button>
+                <button class="btn"><i class="fa fa-user-md fa-5x"></i><a href="{{ url_for('login') }}"></a></button>
                 {% endif %}
             </div>
             <h4>Online Checkup</h4>
@@ -74,4 +74,5 @@
             </div>
         </div>
     </div>
-    {% endblock content %}
+</div>
+{% endblock content %}
