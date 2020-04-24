@@ -2,6 +2,19 @@
 import os
 import cv2
 import numpy as np
+import random
+import pandas as pd
+import tensorflow as tf
+from keras.preprocessing.image import ImageDataGenerator
+
+
+def seed_everything(seed=0):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    tf.compat.v1.set_random_seed(0) #set_random_seed(0)
+seed = 0
+seed_everything(seed)
 
 # helper methods
 def classify(x):
@@ -63,17 +76,42 @@ def preprocess_image(base_path, save_path, image_id, HEIGHT, WIDTH, sigmaX=10):
     cv2.imwrite(save_path + image_id, image)
 
 import tensorflow as tf
-graph = tf.get_default_graph()
+#graph = tf.compat.v1.get_default_graph()
 batch_size = 32
+HEIGHT = 224
+WIDTH = 224
 
 # Prediction
-def prediction(model, image):
-    tim = image.reshape((-1, image.shape[0], image.shape[1], image.shape[2]))
-    #print(tim.shape)
+def prediction(model, preprocessed_image_target, filename):
+    #tim = image.reshape((-1, image.shape[0], image.shape[1], image.shape[2]))
 
-    with graph.as_default():
-        pred = model.predict(tim, batch_size=1)
-        pred_normalized_with_batch = pred[0][0]/batch_size
-        stage = classify(pred_normalized_with_batch)
-        return pred, stage
-    return -1,-1
+    test_dest_path = preprocessed_image_target
+
+    datagen = ImageDataGenerator(rescale=1. / 255,
+                                 rotation_range=360,
+                                 horizontal_flip=True,
+                                 vertical_flip=True)
+    test = pd.DataFrame([[filename]], columns=['id_code'])
+    test_generator = datagen.flow_from_dataframe(
+        dataframe=test,
+        directory=test_dest_path,
+        x_col="id_code",
+        batch_size=1,
+        class_mode=None,
+        shuffle=False,
+        target_size=(HEIGHT, WIDTH),
+        seed=seed)
+
+    #tim = np.expand_dims(image, axis=0)
+    #print(tim.shape)
+    test_generator.reset()
+    tim = next(test_generator)
+    print(tim.shape)
+    #global model
+    #with graph.as_default():
+    pred = model.predict(tim)
+    #pred_normalized_with_batch = pred[0][0]/batch_size
+    #print(pred)
+    stage = classify(pred[0][0])
+    return pred, stage
+    #return -1,-1

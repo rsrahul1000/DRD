@@ -256,3 +256,7 @@ a.article-title:hover {
   max-width: 200px;
   height: auto;
 }
+
+.fa {
+    margin-top: -10px;
+}

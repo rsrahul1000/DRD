@@ -1,72 +1,146 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="container">
-    <div class="row">
-        <h1>Result of the diagnosis:</h1>
-    </div>
-    <div class="row">
-        {% if stage == 0 %}
-        <h1>Stage 0 <br/>
-            No Diabetic Retinopathy</h1>
-        {% elif stage == 1 %}
-        <h1>Stage 1 <br/>
-            Mild Non-proliferative Diabetic Retinopathy</h1>
-        {% elif stage == 2 %}
-        <h1>Stage 2 <br/>
-            Moderate Non-proliferative Diabetic Retinopathy</h1>
-        {% elif stage == 3 %}
-        <h1>Stage 3 <br/>
-            Sever Non-proliferative Diabetic Retinopathy</h1>
-        {% else %}
-        <h1>Stage 4 <br/>
-            Proliferative Diabetic Retinopathy</h1>
-        {% endif %}
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <h4>Original image</h4>
-            <img class="img-thumbnail"
-                 src="{{ url_for('send_original_image', path=original_path, filename=image_name) }}">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <h4>Preprocessed Image</h4>
-            <img class="img-thumbnail"
-                 src="{{ url_for('send_original_image',path=preprocessed_path, filename=image_name) }}">
-        </div>
-    </div>
 
-    {% if stage>0 %}
-    <div class="row">
-        <div class="col-md-4">
-            <h4>Microaneurysms</h4>
-            <img class="img-thumbnail"
-                 src="{{ url_for('send_original_image',path=microaneurysms_path, filename=image_name) }}">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <h4>Exudates</h4>
-            <img class="img-thumbnail"
-                 src="{{ url_for('send_original_image',path=exudates_path, filename=image_name) }}">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <h4>Blood Vessels</h4>
-            <img class="img-thumbnail"
-                 src="{{ url_for('send_original_image',path=blood_vessels_path, filename=image_name) }}">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <h4>haemorrhages</h4>
-            <img class="img-thumbnail"
-                 src="{{ url_for('send_original_image',path=haemorrhage_path, filename=image_name) }}">
-        </div>
-    </div>
-    {% endif %}
-</div>
+	<div class="table-responsive container">
+	  	<h2>Diabetic Retinopathy</h2>
+	  	<p>Diabetic Retinopathy Screening Report</p>           
+	  	<table class="table table-bordered">
+	      	<tr class="success">
+	       		<th>Patient Information</th>
+	        	<th>Contact Information</th>
+	      	</tr>
+	      	<tr>
+	        	<td>
+	        		<b>Patient ID: &nbsp</b> {{ current_user.id }}
+	        	</td>
+	        	<td>
+	        		<b>Email ID: &nbsp</b> {{ current_user.email }}
+	        	</td>
+	      	</tr>
+	      	<tr>
+	        	<td>
+	        		<b>Username: &nbsp</b> {{ current_user.username }}
+	        	</td>
+			<td>
+	        		<b>Contact No.: &nbsp</b> {{ current_user.phoneno }}
+	        	</td>
+	        	
+	      	</tr>
+	      	<tr>
+	        	<td>
+	        		<b>Patient Name: &nbsp</b> {{ current_user.fname }} {{ current_user.lname }}
+	        	</td>
+	        	<td>
+	        		<b>Location: &nbsp</b> {{ current_user.city }}, {{ current_user.state }}-{{ current_user.country }}, {{ current_user.zipcode }}
+	        	</td>
+	      	</tr>
+	      	<tr>
+	        	<td>
+	        		<b>Date of Birth: &nbsp</b> {{ current_user.dob }}
+	        	</td>
+	        	<td>
+	        		<b>Submission Date: &nbsp</b> {{ diagnose.date_added.strftime('%d-%m-%y') }}
+
+	        	</td>
+	      	</tr>
+	      	<tr>
+			<td>
+	        		<b>Gender: &nbsp</b> {{ current_user.sex }}
+	        	</td>
+	        	<td></td>
+	      	</tr>
+	  	</table>
+	</div>
+
+	<div class="container table-responsive">
+		<table class="table table-bordered">
+			<tr class="success">
+				<th colspan="2">Diabetic Retinopathy Screeing Summary</th>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<b>Screening Result: </b>
+					
+					{% if stage == 0 %}
+					Stage 0:&nbsp No Diabetic Retinopathy
+					{% elif stage == 1 %}
+					Stage 1:&nbsp Mild Non-proliferative Diabetic Retinopathy
+					{% elif stage == 2 %}
+					Stage 2:&nbsp Moderate Non-proliferative Diabetic Retinopathy
+					{% elif stage == 3 %}
+					Stage 3:&nbsp Sever Non-proliferative Diabetic Retinopathy
+					{% else %}
+					Stage 4:&nbsp Proliferative Diabetic Retinopathy
+					{% endif %}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<center>
+						<img class="img-thumbnail" src="{{ url_for('send_original_image', path=original_path, filename=image_name) }}" height="300" width="300">
+						<br>
+						<b>Original Image</b>
+					</center>
+				</td>
+				<td>
+					<center>
+						<img class="img-thumbnail"             src="{{ url_for('send_original_image',path=preprocessed_path, filename=image_name) }}" height="300" width="300">
+						<br>
+						<b>Preprocessed Image</b>
+					</center>
+				</td>
+			</tr>
+			{% if stage !=0 %}
+			<tr>
+				<td>
+					<center>
+						<img class="img-thumbnail" src="{{ url_for('send_original_image',path=haemorrhage_path, filename=image_name) }}" height="300" width="300">
+						<br>
+						<b>Haemorrhage</b>
+					</center>
+				</td>
+				<td>
+					<center>
+						<img class="img-thumbnail" src="{{ url_for('send_original_image',path=microaneurysms_path, filename=image_name) }}" height="300" width="300">
+						<br>
+						<b>Microaneurysms</b>
+					</center>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<center>
+						<img class="img-thumbnail" src="{{ url_for('send_original_image',path=exudates_path, filename=image_name) }}" height="300" width="300">
+						<br>
+						<b>Exudates</b>
+					</center>
+				</td>
+				<td>
+					<center>
+						<img class="img-thumbnail" src="{{ url_for('send_original_image',path=blood_vessels_path, filename=image_name) }}" height="300" width="300">
+						<br>
+						<b>Blood vessels</b>
+					</center>
+				</td>
+			</tr>
+			{% endif %}
+		</table>
+	</div>
+
+	<div class="container table-responsive">
+		<table class="table table-bordered">
+			<tr class="success">
+				<th>Plan and Recommendations</th>
+			</tr>
+			<tr>
+				<td> </td>
+			</tr>
+			<tr class="success">
+				<td>
+					<b>Report Date:</b>
+				</td>
+			</tr>
+		</table>
+	</div>
 {% endblock content %}

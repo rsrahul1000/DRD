@@ -5,14 +5,14 @@ from flask import render_template, request, send_from_directory, session, redire
 from helper_methods.forms import RegisterForm, LoginForm, UpdateAccountForm, DiagnoseForm, RequestResetForm, ResetPasswordForm
 from helper_methods.pred_methods import *
 from helper_methods.segmentation import *
-from keras.models import load_model
+#from keras.models import load_model
+from tensorflow.keras.models import load_model
+import efficientnet.tfkeras
 from helper_methods.models import Patients, FundusImage
 from helper_methods import app, db, bcrypt, mail
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 
-# parameters of the image
-from scipy.sparse import dia_matrix
 
 HEIGHT = 224
 WIDTH = 224
@@ -26,6 +26,8 @@ segment_MA_target = os.path.join(APP_ROOT, 'images/microaneurysms/')
 exudates_target = os.path.join(APP_ROOT, 'images/exudates/')
 blood_vessels_target = os.path.join(APP_ROOT, 'images/blood_vessels/')
 haemorrhage_target = os.path.join(APP_ROOT, 'images/haemorrhage/')
+
+model = load_model('Trained_models/effNetB5 val_acc-0.895.h5')
 
 @app.route('/')
 @app.route('/index')
@@ -161,9 +163,6 @@ def new_diagnose():
     if not os.path.isdir(haemorrhage_target):
         os.mkdir(haemorrhage_target)
 
-    with graph.as_default():
-        model = load_model('Trained_models/VGG19 Trained Model.h5')
-
     form = DiagnoseForm()
     if form.validate_on_submit():
         flash('Your Diagnose has been done!', 'success')
@@ -173,11 +172,16 @@ def new_diagnose():
             print(filename)
             print(preprocessed_destination_file)
 
+            #with graph.as_default():
+            #    model = load_model('Trained_models/effNetB5 val_acc-0.895.h5')  # effNetB5 val_acc-0.895  #VGG19 Trained Model
+
             # preprocessing
             preprocess_image(original_image_target, preprocessed_image_target, filename, HEIGHT, WIDTH)
-            tim = cv2.imread(preprocessed_destination_file)
-            tim = cv2.cvtColor(tim, cv2.COLOR_BGR2RGB)
-            preds, stage = prediction(model, tim)
+            #tim = cv2.imread(preprocessed_destination_file)
+            #tim = cv2.cvtColor(tim, cv2.COLOR_BGR2RGB)
+            #global model
+
+            preds, stage = prediction(model, preprocessed_image_target, filename)
             print(preds)
             print(stage)
 
@@ -211,7 +215,8 @@ def new_diagnose():
                                    microaneurysms_path=segment_MA_target,
                                    exudates_path=exudates_target,
                                    blood_vessels_path=blood_vessels_target,
-                                   haemorrhage_path=haemorrhage_target)
+                                   haemorrhage_path=haemorrhage_target,
+                                   diagnose=fundus_image_patient)
 
         return redirect(url_for('result'))
     return render_template('create_diagnose.html', title='New Diagnose',
@@ -230,6 +235,7 @@ def existing_diagnose():
 @login_required
 def diagnose(diagnose_id):
     diag = FundusImage.query.get_or_404(diagnose_id)
+    print(diag.date_added)
     return render_template("result.html",
                            image_name=diag.imageName,
                            stage=diag.stage,
