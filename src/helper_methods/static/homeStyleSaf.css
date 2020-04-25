@@ -117,11 +117,10 @@ h4 {
     font-family: Montserrat, sans-serif;
 }
 .navbar li a, .navbar .navbar-brand {
-    color: #c35d3d !important;
+    color: yellow !important;
 }
 .navbar-nav li a:hover, .navbar-nav li.active a {
-color: #701f05 !important;
-    background-color: #fff !important;
+color: white !important;
 }
 .navbar-default .navbar-toggle {
     border-color: transparent;
@@ -259,4 +258,24 @@ a.article-title:hover {
 
 .fa {
     margin-top: -10px;
+}
+
+.vcenter {
+    display: inline-flex;
+    align-items: center;
+}
+
+@media screen and (min-width: 768px) {
+  .modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
 }

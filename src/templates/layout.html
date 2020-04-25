@@ -18,8 +18,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+<!--
 
-    <!--
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -31,8 +31,9 @@
 
 
 </head>
-<body id="myPage" style="padding-top:50px" data-spy="scroll" data-target=".navbar" data-offset="60">
+<body id="myPage" style="margin-top:50px" data-spy="scroll" data-target=".navbar" data-offset="60">
 <!--<nav class="navbar navbar-default"></nav> -->
+
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -55,7 +56,6 @@
                             <li class="nav-item"><a href="{{ url_for('existing_diagnose') }}"><span class="glyphicon glyphicon-user"></span> EXISITING DIAGNOSE</a></li>
                           <li class="nav-item"><a href="{{ url_for('new_diagnose') }}"><span class="glyphicon glyphicon-user"></span> NEW DIAGNOSE</a></li>
                         </ul>
-                    </li>
                     <li class="nav-item"><a href="{{ url_for('account') }}"><span class="glyphicon glyphicon-user"></span> ACCOUNT</a></li>
                     <li class="nav-item"><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-user"></span> LOGOUT</a></li>
                 {% else %}
@@ -66,6 +66,7 @@
         </div>
     </div>
 </nav>
+
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for category, message in messages %}

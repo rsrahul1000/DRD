@@ -229,7 +229,7 @@ def existing_diagnose():
     original_image_target = os.path.join(APP_ROOT, 'images/original_images/')
     page = request.args.get('page', 1, type=int)
     diagnosis = FundusImage.query.filter_by(patient=current_user).order_by(FundusImage.date_added.desc()).paginate(page=page, per_page=5)
-    return render_template('existing_diagnose.html', diagnosis=diagnosis,
+    return render_template('existing_diagnose.html', diagnosis=diagnosis, #existing_diagnose
                            original_path=original_image_target)
 
 @app.route('/diagnose/<int:diagnose_id>')

@@ -1,77 +1,150 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1 class="col-md-6 col-md-offset-3 mb-3">Total Diagnosed: {{ diagnosis.total }}</h1>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css"
+      integrity="sha256-x8PYmLKD83R9T/sYmJn1j3is/chhJdySyhet/JuHnfY=" crossorigin="anonymous"/>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+#stage_name {
+ position: relative;
+ display: inline-block;
+ transition: .3s;
+ text-decoration: none;
+ }
+ #stage_name::after,
+ #stage_name::before {
+ position: absolute;
+ left: 0;
+ content: '';
+ width: 100%;
+ height: 1px;
+ background-color: green;
+ opacity: 0;
+ transition: .3s;
+ }
+ #stage_name:hover::before {
+ top: 0;
+ opacity: 1;
+ }
+ #stage_name:hover::after {
+ bottom: 0;
+ opacity: 1;
+ }
+ #stage_name:hover {
+ color: green;
+ }
+
+.modal {
+  text-align: center;
+}
+</style>
+
+<div class="container">
     {% for diagnose in diagnosis.items %}
-        <article class="media content-section col-md-6 col-md-offset-3">
-
-            <img class="img-circle " style="width:100px" src="{{ url_for('send_original_image',path=original_path, filename=diagnose.imageName) }}">
-            <div class="media-body">
-
-                <div class="article-metadata">
-                    {{ diagnose.patient.fname }}
-                    <small class="text-muted">{{ diagnose.date_added.strftime('%Y-%m-%d') }}</small>
-                </div>
-                {% if diagnose.patient == current_user %}
-                    <div>
-                        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_diagnose', diagnose_id=diagnose.id) }}">Update</a>
-                        <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModalCenter">Delete</button>
-                    </div>
-                {% endif %}
-                <a class="article-title" href="{{ url_for('diagnose', diagnose_id=diagnose.id) }}">
-                    {% if diagnose.stage == 0 %}
-                        <h1>No Diabetic Retinopathy</h1>
-                    {% elif diagnose.stage == 1 %}
-                        <h1>Mild Non-proliferative Diabetic Retinopathy</h1>
-                    {% elif diagnose.stage == 2 %}
-                        <h1>Moderate Non-proliferative Diabetic Retinopathy</h1>
-                    {% elif diagnose.stage == 3 %}
-                        <h1>Sever Non-proliferative Diabetic Retinopathy</h1>
-                    {% else %}
-                    <h1>Proliferative Diabetic Retinopathy</h1>
-                    {% endif %}
-                </a>
-                <h2>Stage: {{ diagnose.stage }} </h2>
-
-                {% if diagnose.side == 'L' %}
+    <div class="row justify-content-md-center">
+        <div class="col-sm-4 col-sm- col-lg-6 col-sm-offset-4 col-lg-offset-3">
+            <div class="thumbnail content-section w3-card-4 w3-margin">
+                <img class="img-thumbnail" style="height: 250px; width: 100%; display: block;"
+                     src="{{ url_for('send_original_image',path=original_path, filename=diagnose.imageName) }}">
+                <div class="caption">
+                    <a id="stage_name" href="{{ url_for('diagnose', diagnose_id=diagnose.id) }}" style="text-decoration: none;">
+                        {% if diagnose.stage == 0 %}
+                        <h3>No Diabetic Retinopathy</h3>
+                        {% elif diagnose.stage == 1 %}
+                        <h3>Mild Non-proliferative Diabetic Retinopathy</h3>
+                        {% elif diagnose.stage == 2 %}
+                        <h3>Moderate Non-proliferative Diabetic Retinopathy</h3>
+                        {% elif diagnose.stage == 3 %}
+                        <h3>Sever Non-proliferative Diabetic Retinopathy</h3>
+                        {% else %}
+                        <h3>Proliferative Diabetic Retinopathy</h3>
+                        {% endif %}
+                    </a>
+                    <p></p>
+                    <a href="{{ url_for('account') }}" style="text-decoration: none;">
+                        <div class="badge badge-pill mt-2 bg-primary text-white vcenter">
+                            <i class="material-icons">account_circle</i>{{ diagnose.patient.fname }}
+                        </div>
+                    </a>
+                    <p></p>
+                    <p>Unique ID: {{diagnose.id}}</p>
+                    <p>Diagnose Date: {{ diagnose.date_added.strftime('%Y-%m-%d') }}</p>
+                    <p>Stage: {{ diagnose.stage }} </p>
+                    {% if diagnose.side == 'L' %}
                     <p class="'article-content">Side: Left</p>
-                {% else %}
+                    {% else %}
                     <p class="'article-content">Side: Right</p>
-                {% endif %}
-
-            </div>
-        </article>
-        <!-- Modal -->
-        <div class="modal fade" id="deleteModalCenter" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLongTitle">Delete Diagnose?</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                    {% endif %}
+                    <p></p>
+                    <p>
+                        <a class="btn btn-primary btn-sm mt-1 mb-1"
+                           href="{{ url_for('update_diagnose', diagnose_id=diagnose.id) }}">Update</a>
+                        <button type="button" class="btn btn-default btn-sm m-1" data-toggle="modal"
+                                data-target="#deleteModalCenter">Delete
                         </button>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <form action="{{ url_for('delete_diagnose', diagnose_id=diagnose.id) }}" method="POST">
-                            <input class="btn btn-danger" type="submit" value="Delete">
-                        </form>
-                    </div>
+                    </p>
                 </div>
             </div>
         </div>
-    {% endfor %}
-    <div class="media col-md-6 col-md-offset-3 m-1 p-md">
-    {% for page_num in diagnosis.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-        {% if page_num %}
-            {% if diagnosis.page == page_num %}
-                <a class="btn btn-outline-info mb-4" style="background-color: #4CAF50;"  href="{{ url_for('existing_diagnose', page=page_num) }}">{{ page_num }}</a>
-            {% else %}
-                <a class="btn btn-info mb-4" href="{{ url_for('existing_diagnose', page=page_num) }}">{{ page_num }}</a>
-            {% endif %}
-        {% else %}
-            ...
-        {% endif %}
-    {% endfor %}
     </div>
+
+    <div class="modal fade" id="deleteModalCenter" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="deleteModalLongTitle">Delete Diagnose?</h4>
+                </div>
+                <div class="modal-body">
+                    <h3>Current diagnose will be deleted permanently, cannot be recovered!</h3>
+                </div>
+                <div class="modal-footer">
+                    <form action="{{ url_for('delete_diagnose', diagnose_id=diagnose.id) }}" method="POST">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <input class="btn btn-danger" type="submit" value="Delete">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal
+    <div class="modal fade" id="deleteModalCenter" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLongTitle">Delete Diagnose?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <form action="{{ url_for('delete_diagnose', diagnose_id=diagnose.id) }}" method="POST">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <input class="btn btn-danger" type="submit" value="Delete">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    -->
+    {% endfor %}
+    <div class="row text-center">
+        <div class="col-sm-4 col-sm- col-lg-6 col-sm-offset-4 col-lg-offset-3">
+            {% for page_num in diagnosis.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                {% if page_num %}
+                    {% if diagnosis.page == page_num %}
+                        <a class="btn btn-outline-info mb-4" style="background-color: #4CAF50;"
+                           href="{{ url_for('existing_diagnose', page=page_num) }}">{{ page_num }}</a>
+                    {% else %}
+                        <a class="btn btn-info mb-4" href="{{ url_for('existing_diagnose', page=page_num) }}">{{ page_num }}</a>
+                    {% endif %}
+                {% else %}
+                ...
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
 {% endblock content %}
