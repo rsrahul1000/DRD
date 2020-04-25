@@ -81,6 +81,15 @@ batch_size = 32
 HEIGHT = 224
 WIDTH = 224
 
+#Solved the problem for muliple times GPU session created in debug, this allows growth and does not give error
+import tensorflow as tf
+config = tf.compat.v1.ConfigProto(gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.8)
+# device_count = {'GPU': 1}
+)
+config.gpu_options.allow_growth = True
+session = tf.compat.v1.Session(config=config)
+tf.compat.v1.keras.backend.set_session(session)
+
 # Prediction
 def prediction(model, preprocessed_image_target, filename):
     #tim = image.reshape((-1, image.shape[0], image.shape[1], image.shape[2]))

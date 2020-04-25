@@ -27,6 +27,7 @@ exudates_target = os.path.join(APP_ROOT, 'images/exudates/')
 blood_vessels_target = os.path.join(APP_ROOT, 'images/blood_vessels/')
 haemorrhage_target = os.path.join(APP_ROOT, 'images/haemorrhage/')
 
+#with graph.as_default():
 model = load_model('Trained_models/effNetB5 val_acc-0.895.h5')
 
 @app.route('/')
