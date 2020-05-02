@@ -313,6 +313,14 @@ class UpdateAccountForm(FlaskForm):
             if user:
                 raise ValidationError('That email is taken. Please choose a different one')
 
+    def validate_phone(self, phone):
+        try:
+            p = phonenumbers.parse(phone.data)
+            if not phonenumbers.is_valid_number(p):
+                raise ValueError()
+        except (phonenumbers.phonenumberutil.NumberParseException, ValueError):
+            raise ValidationError('Invalid phone number')
+
 class DiagnoseForm(FlaskForm):
     side = SelectField('Side', choices=[('L', 'Left'), ('R', 'Right')])
     picture = FileField('Upload Fundus Image', validators=[FileAllowed(['jpg','png','jpeg'])])

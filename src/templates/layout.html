@@ -18,6 +18,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/css/intlTelInput.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/intlTelInput.min.js"></script>
+
 <!--
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -37,7 +40,7 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="{{ url_for('index') }}"><span class="fa fa-eye fa-2x" style="margin-top: -10px;"></span></a>
+            <a class="navbar-brand" href="{{ url_for('index') }}"><span class="fa fa-eye fa-2x" style="position:relative; margin-top: -10px; font-size:40px; color:gold"></span></a>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -53,7 +56,7 @@
                 {% if current_user.is_authenticated %}
                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">DIAGNOSIS<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li class="nav-item"><a href="{{ url_for('existing_diagnose') }}"><span class="glyphicon glyphicon-user"></span> EXISITING DIAGNOSE</a></li>
+                            <li class="nav-item"><a href="{{ url_for('existing_diagnose') }}" style="color:black"><span class="glyphicon glyphicon-user"></span> EXISITING DIAGNOSE</a></li>
                           <li class="nav-item"><a href="{{ url_for('new_diagnose') }}"><span class="glyphicon glyphicon-user"></span> NEW DIAGNOSE</a></li>
                         </ul>
                     <li class="nav-item"><a href="{{ url_for('account') }}"><span class="glyphicon glyphicon-user"></span> ACCOUNT</a></li>
@@ -80,7 +83,22 @@
 
 </body>
 </html>
-
+<script>
+    var wtf_phone_field = document.getElementById('phone');
+    wtf_phone_field.style.position = 'absolute';
+    wtf_phone_field.style.top = '-9999px';
+    wtf_phone_field.style.left = '-9999px';
+    wtf_phone_field.parentElement.insertAdjacentHTML('beforeend', '<div><input type="tel" id="_phone"></div>');
+    var fancy_phone_field = document.getElementById('_phone');
+    var fancy_phone_iti = window.intlTelInput(fancy_phone_field, {
+        separateDialCode: true,
+        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.4/js/utils.js",
+    });
+    fancy_phone_iti.setNumber(wtf_phone_field.value);
+    fancy_phone_field.addEventListener('blur', function() {
+        wtf_phone_field.value = fancy_phone_iti.getNumber();
+    });
+</script>
 <script>
 $(document).ready(function(){
   // Add smooth scrolling to all links in navbar + footer link
@@ -116,5 +134,4 @@ $(document).ready(function(){
     });
   });
 })
-
 </script>
