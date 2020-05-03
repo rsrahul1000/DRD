@@ -5,6 +5,14 @@
       integrity="sha256-x8PYmLKD83R9T/sYmJn1j3is/chhJdySyhet/JuHnfY=" crossorigin="anonymous"/>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <style>
+body{
+    text-align: left;
+}
+@media screen and (min-width: 48em){
+    body{
+        text-align: justify;
+    }
+}
 #stage_name {
  position: relative;
  display: inline-block;
@@ -40,6 +48,7 @@
 </style>
 
 <div class="container">
+    <h3 class="text-center">Total Diagnosed: {{ diagnosis.total }}</h3>
     {% for diagnose in diagnosis.items %}
     <div class="row justify-content-md-center">
         <div class="col-sm-4 col-sm- col-lg-6 col-sm-offset-4 col-lg-offset-3">

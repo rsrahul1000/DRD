@@ -12,7 +12,7 @@ from helper_methods.models import Patients, FundusImage
 from helper_methods import app, db, bcrypt, mail
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
-
+from pathlib import Path
 
 HEIGHT = 224
 WIDTH = 224
@@ -65,7 +65,7 @@ def registerUser():
                         address=form.address.data, city=form.city.data, state=form.state.data, zipcode=form.zipcode.data, country=form.country.data)
         db.session.add(user)
         db.session.commit()
-        session['phone'] = form.phone.data
+        #session['phone'] = form.phone.data
         flash(f'Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='register', form=form)
@@ -93,8 +93,9 @@ def save_profile_picture(form_picture, image_path):
 def account():
     profile_image_target = 'profile_pics/'
     saving_path_profile_target = os.path.join(app.root_path, 'static/profile_pics')
-    if not os.path.isdir(profile_image_target):
-        os.mkdir(profile_image_target)
+    #if not os.path.isdir(profile_image_target):
+    #    os.mkdir(profile_image_target)
+    Path(profile_image_target).mkdir(parents=True, exist_ok=True)
 
     form = UpdateAccountForm()
     if form.validate_on_submit():
@@ -146,24 +147,24 @@ def save_oroginal_picture(form_picture, image_path):
 @login_required
 def new_diagnose():
 
-    if not os.path.isdir(original_image_target):
-        os.mkdir(original_image_target)
-
-    if not os.path.isdir(preprocessed_image_target):
-        os.mkdir(preprocessed_image_target)
-
-    if not os.path.isdir(segment_MA_target):
-        os.mkdir(segment_MA_target)
-
-    if not os.path.isdir(exudates_target):
-        os.mkdir(exudates_target)
-
-    if not os.path.isdir(blood_vessels_target):
-        os.mkdir(blood_vessels_target)
-
-    if not os.path.isdir(haemorrhage_target):
-        os.mkdir(haemorrhage_target)
-
+    #if not os.path.isdir(original_image_target):
+    #    os.mkdir(original_image_target)
+    Path(original_image_target).mkdir(parents=True, exist_ok=True)
+    #if not os.path.isdir(preprocessed_image_target):
+    #    os.mkdir(preprocessed_image_target)
+    Path(preprocessed_image_target).mkdir(parents=True, exist_ok=True)
+    #if not os.path.isdir(segment_MA_target):
+    #    os.mkdir(segment_MA_target)
+    Path(segment_MA_target).mkdir(parents=True, exist_ok=True)
+    #if not os.path.isdir(exudates_target):
+    #    os.mkdir(exudates_target)
+    Path(exudates_target).mkdir(parents=True, exist_ok=True)
+    #if not os.path.isdir(blood_vessels_target):
+    #    os.mkdir(blood_vessels_target)
+    Path(blood_vessels_target).mkdir(parents=True, exist_ok=True)
+    #if not os.path.isdir(haemorrhage_target):
+    #    os.mkdir(haemorrhage_target)
+    Path(haemorrhage_target).mkdir(parents=True, exist_ok=True)
     form = DiagnoseForm()
     if form.validate_on_submit():
         flash('Your Diagnose has been done!', 'success')
