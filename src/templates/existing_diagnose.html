@@ -56,7 +56,7 @@ body{
                 <img class="img-thumbnail" style="height: 250px; width: 100%; display: block;"
                      src="{{ url_for('send_original_image',path=original_path, filename=diagnose.imageName) }}">
                 <div class="caption">
-                    <a id="stage_name" href="{{ url_for('diagnose', diagnose_id=diagnose.id) }}" style="text-decoration: none;">
+                    <a id="stage_name" href="{{ url_for('diagnose', diagnose_id=diagnose.id) }}" style="text-decoration: none;width: -webkit-fill-available;">
                         {% if diagnose.stage == 0 %}
                         <h3>No Diabetic Retinopathy</h3>
                         {% elif diagnose.stage == 1 %}
