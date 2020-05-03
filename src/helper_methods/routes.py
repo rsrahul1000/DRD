@@ -289,7 +289,7 @@ def delete_diagnose(diagnose_id):
 def send_reset_email(user):
     token = user.get_reset_token()
     msg = Message('Password Reset Request',
-                  sender='noreply@demo.com',
+                  sender='eyetech.care.vision@gmail.com',
                   recipients=[user.email])
     msg.body = f'''To reset your password, visit the following link:
 {url_for('reset_token', token=token, _external=True)}
@@ -324,7 +324,6 @@ def reset_token(token):
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user.password = hashed_password
         db.session.commit()
-        #session['phone'] = form.phone.data
         flash(f'Your password has been updated! You are now able to log in', 'success')
         return redirect(url_for('login'))
     return render_template('reset_token.html', title="Reset Password", form=form)
