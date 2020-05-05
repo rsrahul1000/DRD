@@ -197,7 +197,7 @@ def new_diagnose():
                 cv2.imwrite(exudates_target + filename, ex)  # cv2.cvtColor(ex, cv2.COLOR_RGB2BGR))
 
                 # Blood Vessels
-                bv = extract_bv(original_image_target, filename)
+                bv,_ = extract_bv(original_image_target, filename)
                 cv2.imwrite(blood_vessels_target + filename, bv)  # cv2.cvtColor(bv, cv2.COLOR_RGB2BGR))
 
                 # haemorrhages

@@ -139,7 +139,7 @@ def extract_bv(base_path, image_id):
 
     finimage = cv2.bitwise_and(fundus_eroded, fundus_eroded, mask=xmask)
     blood_vessels = cv2.bitwise_not(finimage)
-    return blood_vessels
+    return blood_vessels, finimage
 
 
 def exudate(base_path, image_id):
@@ -217,5 +217,10 @@ def haemorrhage(base_path, image_id):
 
     opening = cv2.morphologyEx(thresh2, cv2.MORPH_OPEN, (10, 10))
 
-    return opening
+    _, blood_vessels = extract_bv(base_path, image_id)
+    kernel = np.ones((25, 25), np.uint8)
+    veins = cv2.dilate(blood_vessels, kernel, iterations=1)
+    hammerage = cv2.morphologyEx(opening - veins, cv2.MORPH_ERODE, (10, 10))
+
+    return hammerage
 
