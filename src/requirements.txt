@@ -7,7 +7,7 @@ Flask_SQLAlchemy==2.4.1
 itsdangerous==1.1.0
 numpy==1.18.1
 phonenumbers==8.10.14
-tensorflow==2.1.0
+tensorflow==2.1.2
 WTForms==2.2.1
 efficientnet==1.1.0
 pandas==1.0.3
