@@ -43,7 +43,7 @@
 > ```
 >- Example of accessing the website in browser:
 > ```bash
-> 192.168.1.100:5005
+> 192.168.X.X:5005
 > ```
 
 ### Application Tested On:
