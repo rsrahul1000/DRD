@@ -2,3 +2,4 @@ __pycache__
 images/
 Trained_models/
 .idea/
+src/helper_methods/site.db
