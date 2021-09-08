@@ -12,5 +12,5 @@ WTForms==2.2.1
 efficientnet==1.1.0
 pandas==1.0.3
 Flask_Login==0.4.1
-Pillow==7.1.2
+Pillow==8.3.2
 secrets==1.0.2
